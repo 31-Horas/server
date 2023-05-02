@@ -1,4 +1,5 @@
 import pandas
+import json
 
 
 def get_statistic_data(filename, sheet_name):
@@ -12,7 +13,7 @@ def get_statistic_data(filename, sheet_name):
 
 print(
     get_statistic_data(
-        "statistic_id1275957_it-certification-held-by-technologists-in-the-united-states-2021.xlsx",
+        "statistic_id1358087_ownership-of-cybersecurity-certifications-worldwide-2022.xlsx",
         "Data",
     )
 )
