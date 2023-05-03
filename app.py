@@ -1,43 +1,52 @@
-from flask import Flask
-import psycopg2
+from flask import Flask, jsonify, request
+from flask_restful import Resource, Api
+from flask_mysqldb import MySQL
+from dotenv import load_dotenv
+from csv_to_json import make_json
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
+api = Api(app)
 
-# Conectar a la base de datos de PostgreSQL
-conn = psycopg2.connect(
-    host="ibmdb.cxc7zm15y7c9.us-east-2.rds.amazonaws.com",
-    database="ibmdb",
-    user="postgres",
-    password="rodo1997",
-    sslmode="require"
-)
+app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
+app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
+app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 
-# Crear un objeto cursor para ejecutar comandos SQL
-cur = conn.cursor()
+mysql = MySQL(app)
 
-#TODO= Aqui se incluira las diferentes vistas de la aplicacion
-# Definir una ruta para mostrar las tablas de la base de datos
-@app.route("/tables")
-def tables():
-    # Ejecutar una consulta para obtener la lista de tablas
-    cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name")
-    rows = cur.fetchall()
+class HelloWorld(Resource):
+    def get(self):
+        return {'hello': 'world'}
 
-    # Crear una tabla HTML para mostrar los resultados
-    table_html = "<table>"
-    table_html += "<tr><th>Nombre de la tabla</th></tr>"
-    for row in rows:
-        table_html += "<tr><td>{}</td></tr>".format(row[0])
-    table_html += "</table>"
-    
-    # Cerrar el cursor y devolver la tabla HTML
-    cur.close()
-    return table_html
+class Data(Resource):
+    def get(self):
+        data = {'message': 'Hola desde Flask!'}
+        return jsonify(data)
 
-# Definir una ruta para la página principal
-@app.route("/")
-def home():
-    return "Hola, mundo!"
+class Index(Resource):
+    def get(self):
+        return jsonify({'message': 'Hola, este es un punto final de prueba!'})
 
-if __name__ == "__main__":
-    app.run()
+class Welcome(Resource):
+    def get(self):
+        return jsonify({'message': 'Hola, desde welcome!'})
+
+class ProcesarCSV(Resource):
+    def post(self):
+        archivo_csv = request.files['archivo_csv']
+        # Llamar al script que procesa el archivo CSV y devuelve los datos en formato JSON
+        datos_json = make_json(archivo_csv)
+        print(datos_json)
+        return jsonify(datos_json)
+
+api.add_resource(HelloWorld, '/api/helloworld')
+api.add_resource(Data, '/api/data')
+api.add_resource(Index, '/api/')
+api.add_resource(Welcome, '/api/welcome')
+api.add_resource(ProcesarCSV, '/api/procesar-csv')
+
+if __name__ == '__main__':
+    app.run(debug=True)
