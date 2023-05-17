@@ -1,11 +1,10 @@
 import pandas
 import json
-import MySQLdb
 
-conn = MySQLdb.connect(host = "",
-                       user = "",
-                       passwd = "",
-                       db = "")
+# import mysql.connector as mysqldb
+
+# conn = mysqldb.connect(host="", user="", passwd="", db="")
+
 
 def get_json_statistic_data(filename, sheet_name):
     statistic_data = pandas.read_excel(
@@ -16,6 +15,19 @@ def get_json_statistic_data(filename, sheet_name):
     return json.loads(json_data)
 
 
+# def values_to_string(values):
+#     values_str = ""
+#     for i, record in enumerate(values):
+#         val_list = []
+#         for v, val in enumerate(record):
+#             if type(val) == str:
+#                 val = "'{}'".format(val.replace("'", "''"))
+#             val_list += [str(val)]
+#         values_str += "(" + ", ".join(val_list) + "),\n"
+#     values_str = values_str[:-2] + ";"
+#     return values_str
+
+
 json_obj = get_json_statistic_data(
     "statistic_id1358087_ownership-of-cybersecurity-certifications-worldwide-2022.xlsx",
     "Data",
@@ -23,22 +35,11 @@ json_obj = get_json_statistic_data(
 
 print(json.dumps(json_obj))
 
-table_name = "Ownership_of_cybersecurity_certifications_worldwide_2022"
-columns = [list(x.keys()) for x in json_obj][0]
-values = [list(x.values()) for x in json_obj]
+# table_name = "Ownership_of_cybersecurity_certifications_worldwide_2022"
+# columns = [list(x.keys()) for x in json_obj][0]
+# values = [list(y.values()) for y in json_obj]
 
-values_str = ""
-for i, record in enumerate(values):
-    val_list = []
-    for v, val in enumerate(record):
-        if type(val) == str:
-            val = "'{}'".format(val.replace("'", "''"))
-        val_list += [ str(val) ]
-    values_str += "(" + ', '.join( val_list ) + "),\n"
-values_str = values_str[:-2] + ";"
-
-conn.execute("INSERT INTO %s (%s)\nVALUES\n%s" % (
-    table_name,
-    ', '.join(columns),
-    values_str
-)
+# conn.execute(
+#     "INSERT INTO %s (%s)\nVALUES\n%s"
+#     % (table_name, ", ".join(columns), values_to_string(values))
+# )
