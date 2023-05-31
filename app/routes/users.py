@@ -2,7 +2,7 @@ from flask import request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask.blueprints import Blueprint
 
-from app import db
+from app.extensions import db
 
 # Define a blueprint for the users
 users_bp = Blueprint('users', __name__, url_prefix='/users')
