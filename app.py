@@ -12,7 +12,6 @@ from app.extensions import db
 app = Flask(__name__, template_folder='app/templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_CONNECTION_STRING')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy()
 
 # Configure CORS for '/api' routes
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
