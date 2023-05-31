@@ -9,7 +9,7 @@ from app.routes.users import users_bp
 app = Flask(__name__, template_folder='app/templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_CONNECTION_STRING')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
 # Configure CORS for '/api' routes
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
@@ -24,6 +24,8 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 app.register_blueprint(api_bp, url_prefix='/api')
 app.register_blueprint(bucket_bp, url_prefix='/bucket')
 app.register_blueprint(users_bp, url_prefix='/users')
+
+db.init_app(app)
 
 @app.route('/')
 def index():
