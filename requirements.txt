@@ -1,5 +1,7 @@
 Flask==2.0.2
 Flask-MySQLdb==0.2.0
-python-dotenv==0.19.0
+Flask-SQLAlchemy==3.0.3
+Flask-RESTful==0.3.9
 Flask-Cors==3.0.10
+python-dotenv==0.19.0
 mysql-connector-python==8.0.27
