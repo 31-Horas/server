@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-import os
+from dotenv import dotenv_values
 
 from app.routes.api import api_bp
 from app.routes.bucket import bucket_bp
@@ -10,7 +9,7 @@ from app.routes.users import users_bp
 from app.extensions import db
 
 app = Flask(__name__, template_folder='app/templates')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_CONNECTION_STRING')
+app.config = dotenv_values('.env')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Configure CORS for '/api' routes
