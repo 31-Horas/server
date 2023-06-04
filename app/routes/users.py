@@ -3,21 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask.blueprints import Blueprint
 
 from app.extensions import db
+from app.models.user import User
 
 # Define a blueprint for the users
 users_bp = Blueprint('users', __name__, url_prefix='/users')
-
-
-class User(db.Model):
-    __tablename__ = 'user'
-
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_email = db.Column(db.String(254), nullable=False)
-    user_pswd = db.Column(db.String(45), nullable=False)
-
-    def __init__(self, user_email, user_pswd):
-        self.user_email = user_email
-        self.user_pswd = user_pswd
 
 # Flask routes for user operations
 @users_bp.route('/', methods=['POST'])

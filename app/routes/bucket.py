@@ -1,7 +1,14 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 import boto3
 import os
+from botocore.exceptions import BotoCoreError, ClientError
 from dotenv import dotenv_values
+from flask_login import current_user
+
+
+from app.extensions import db
+from app.models.user import User
+from app.models.bucket import Bucket
 
 config = dotenv_values(".env")
 
@@ -35,19 +42,23 @@ def getdata():
 def upload_to_s3():
     # Get the uploaded file from the request
     file = request.files['file']
-
     # Generate a unique file name
     file_name = os.urandom(24).hex() + '.csv'
+    # Get the user_id from the request
+    user_id = current_user.get_id
+    # Create an instance of the Bucket model
+    new_file = Bucket(file.name, file_name, user_id)
+
+    db.session.add(new_file)
+    db.session.commit()
 
     client.put_object(
-        # ACL='public-read',
-        Body=file,
-        Bucket=bucket_name,
-        Key=file_name
-    )
-
-    # Return a response indicating success
-    return 'File uploaded successfully!'
+            Body=file,
+            Bucket=bucket_name,
+            Key=file_name
+        )
+    return 'File uploaded successfully!', 200
+    
 
 @bucket_bp.route("/delete/<item_id>", methods=['DELETE'])
 def delete(item_id):
