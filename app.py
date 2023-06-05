@@ -19,19 +19,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = config['SECRET_KEY']
 
 # Configure CORS for '/api' routes
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
 
 # Configure CORS for '/bucket' routes
-CORS(app, resources={r"/bucket/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/bucket/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
 
 # Configure CORS for '/users' routes
-CORS(app, resources={r"/users/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/users/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
 
 # Configure CORS for '/auth' routes
-CORS(app, resources={r"/auth/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/auth/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
 
 # Configure CORS for other routes
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*", "supports_credentials": True}})
+
 
 # Register blueprints
 app.register_blueprint(api_bp, url_prefix='/api')
@@ -45,7 +46,6 @@ db.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    print('Esto es app.py ' + User.query.get(int(user_id)).user_email)
     # Load the user object from the database based on the user_id
     return User.query.get(int(user_id))
 

@@ -14,6 +14,4 @@ class User(db.Model, UserMixin):
         self.user_pswd = user_pswd
 
     def get_id(self):
-        print('Esto es get_id ')
-        print(self.user_id)
         return str(self.user_id)

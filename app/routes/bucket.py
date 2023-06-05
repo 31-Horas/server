@@ -45,7 +45,7 @@ def upload_to_s3():
     # Generate a unique file name
     file_name = os.urandom(24).hex() + '.csv'
     # Get the user_id from the request
-    user_id = current_user.get_id
+    user_id = current_user.get_id()
     # Create an instance of the Bucket model
     new_file = Bucket(file.name, file_name, user_id)
 
