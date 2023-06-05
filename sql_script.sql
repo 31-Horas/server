@@ -23,7 +23,7 @@ USE `otterboard` ;
 CREATE TABLE IF NOT EXISTS `otterboard`.`user` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `user_email` VARCHAR(254) NOT NULL,
-  `user_pswd` VARCHAR(45) NOT NULL,
+  `user_pswd` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`user_id`))
 ENGINE = InnoDB;
 
@@ -33,8 +33,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `otterboard`.`bucketFile` (
   `bucketFile_id` INT NOT NULL AUTO_INCREMENT,
-  `bucketFile_name` VARCHAR(100) NOT NULL,
-  `bucketFile_code` VARCHAR(45) NOT NULL,
+  `bucketFile_name` VARCHAR(45) NOT NULL,
+  `bucketFile_code` VARCHAR(100) NOT NULL,
   `user_id` INT NOT NULL,
   PRIMARY KEY (`bucketFile_id`, `user_id`),
   CONSTRAINT `fk_badgesFile_user`
