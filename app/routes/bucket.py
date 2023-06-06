@@ -42,12 +42,14 @@ def getdata():
 def upload_to_s3():
     # Get the uploaded file from the request
     file = request.files['file']
+    # Get the file name from the request
+    file_name = request.form['filename']
     # Generate a unique file name
-    file_name = os.urandom(24).hex() + '.csv'
+    file_code = os.urandom(24).hex() + '.csv'
     # Get the user_id from the request
     user_id = current_user.get_id()
     # Create an instance of the Bucket model
-    new_file = Bucket(request.files['name'], file_name, user_id)
+    new_file = Bucket(file_name, file_code, user_id)
 
     db.session.add(new_file)
     db.session.commit()
