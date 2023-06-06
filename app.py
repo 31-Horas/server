@@ -49,7 +49,6 @@ def load_user(user_id):
     # Load the user object from the database based on the user_id
     return User.query.get(int(user_id))
 
-
 @app.route('/')
 def index():
     return render_template('index.html')

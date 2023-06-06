@@ -11,6 +11,7 @@ auth_bp = Blueprint('auth', __name__)
 @auth_bp.route('/signin', methods=['GET','POST'])
 def signin():
     if current_user.is_authenticated:
+        print('Already logged in')
         return 'Already logged in', 200
 
     if request.method == 'POST':
@@ -23,13 +24,14 @@ def signin():
 
         if not user or not check_password_hash(user.user_pswd, password):
             flash('Invalid email or password', 'error')
+            print('Invalid email or password')
             return 'Invalid email or password', 401
 
         login_user(user, remember=remember)
-
         return 'Logged in successfully', 200
     else:
-        return 'Session Expired', 202
+        print('Session Expired')
+        return 'Session Expired', 201
 
 @auth_bp.route('/signup', methods=['POST'])
 def signup():
@@ -55,10 +57,12 @@ def signup():
         return 'Account created successfully. Please sign in.', 202
 
 
-@auth_bp.route('/logout')
+@auth_bp.route('/logout', methods=['GET'])
 @login_required
 def logout():
+    print(current_user.is_authenticated)
     logout_user()
+    print(current_user.is_authenticated)
     return 'Logged out successfully', 200
 
 
