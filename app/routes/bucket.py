@@ -47,7 +47,7 @@ def upload_to_s3():
     # Get the user_id from the request
     user_id = current_user.get_id()
     # Create an instance of the Bucket model
-    new_file = Bucket(file.name, file_name, user_id)
+    new_file = Bucket(request.files['name'], file_name, user_id)
 
     db.session.add(new_file)
     db.session.commit()
