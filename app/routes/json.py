@@ -27,11 +27,17 @@ bucket_bp = Blueprint("bucket", __name__)
 
 @bucket_bp.route("/json_data/<item_id>", methods=["GET"])
 def json_data():
-    bucket_name = Bucket.bucketfile_name
-    # item_id =Bucket.bucketfile_id
-
-    result = client.list_objects(Bucket=bucket_name)
-    for o in result.get("Contents"):
-        data = client.get_object(Bucket=bucket_name, Key=o.get("Key"))
-        contents = data["Body"].read()
-        print(contents.decode("utf-8"))
+    bucket_name = Bucket.bucketfile_name  # obtenemos el nombre del bucket con cookies
+    result = client.list_objects(
+        Bucket=bucket_name
+    )  # obtenemos el resultado de la lista de objetos del bucket
+    o = result.get("Contents")[0]  # obtenemos el primer objeto de la lista
+    # for o in result.get("Contents"):
+    data = client.get_object(
+        Bucket=bucket_name, Key=o.get("Key")
+    )  # obtenemos el objeto con el nombre del bucket y la key
+    contents = data[
+        "Body"
+    ].read()  # obtenemos el contenido del objeto (puede ser binary file)
+    print(contents.decode("utf-8"))
+    print(type(contents))
