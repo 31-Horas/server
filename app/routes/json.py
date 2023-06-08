@@ -22,10 +22,10 @@ client = boto3.client(
 
 bucket_name = "truerodobucket"
 
-bucket_bp = Blueprint("bucket", __name__)
+json_bp = Blueprint("json", __name__)
 
 
-@bucket_bp.route("/json_data/<item_id>", methods=["GET"])
+@json_bp.route("/json_data/<item_id>", methods=["GET"])
 def json_data():
     bucket_name = Bucket.bucketfile_name
     # item_id =Bucket.bucketfile_id
