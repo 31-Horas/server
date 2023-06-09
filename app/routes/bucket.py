@@ -62,6 +62,10 @@ def upload_to_s3():
     if existing_file:
         return 'File with the same name already exists!', 409  # Return a conflict status code
 
+    # Check if the file has a CSV extension
+    if not file_name.lower().endswith('.csv'):
+        return 'Only CSV files are allowed!', 400  # Return a bad request status code
+
     # Create an instance of the Bucket model
     new_file = Bucket(file_name, file_code, user_id)
 
@@ -75,6 +79,7 @@ def upload_to_s3():
     )
     
     return 'File uploaded successfully!', 200
+
     
 
 @bucket_bp.route("/delete/<item_id>", methods=['DELETE'])
