@@ -1,9 +1,9 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 import boto3
 import os
 from botocore.exceptions import BotoCoreError, ClientError
 from dotenv import dotenv_values
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 
 from app.extensions import db
@@ -32,13 +32,20 @@ def download_data(item_id):
 
 
 @bucket_bp.route("/get_data", methods=['GET'])
-def getdata():
-    data = ''
-    for obj in client.list_objects(Bucket=bucket_name)['Contents']:
-        data += obj['Key'] + '\n'
-    return data
+@login_required
+def get_data():
+    data = []
+    user_id = current_user.get_id()
+    buckets = Bucket.query.filter_by(user_id=user_id).all()  # Retrieve the buckets for the current user
+
+    for obj in buckets:
+        data.append(obj.bucketfile_name)  # Append the 'bucketfile_name' attribute to the list
+
+    return jsonify(data)
+
 
 @bucket_bp.route('/upload', methods=['POST'])
+@login_required
 def upload_to_s3():
     # Get the uploaded file from the request
     file = request.files['file']
@@ -48,6 +55,13 @@ def upload_to_s3():
     file_code = os.urandom(24).hex() + '.csv'
     # Get the user_id from the request
     user_id = current_user.get_id()
+    print(user_id)
+
+    # Check if the file name already exists for the current user
+    existing_file = Bucket.query.filter_by(bucketfile_name=file_name, user_id=user_id).first()
+    if existing_file:
+        return 'File with the same name already exists!', 409  # Return a conflict status code
+
     # Create an instance of the Bucket model
     new_file = Bucket(file_name, file_code, user_id)
 
@@ -55,14 +69,16 @@ def upload_to_s3():
     db.session.commit()
 
     client.put_object(
-            Body=file,
-            Bucket=bucket_name,
-            Key=file_name
-        )
+        Body=file,
+        Bucket=bucket_name,
+        Key=file_name
+    )
+    
     return 'File uploaded successfully!', 200
     
 
 @bucket_bp.route("/delete/<item_id>", methods=['DELETE'])
+@login_required
 def delete(item_id):
     file_name = item_id
     client.delete_object(

@@ -12,4 +12,3 @@ class Bucket(db.Model):
         self.bucketfile_name = bucketfile_name
         self.bucketfile_code = bucketfile_code
         self.user_id = user_id
-        

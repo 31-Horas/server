@@ -1,5 +1,4 @@
 from flask import request, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from flask.blueprints import Blueprint
 
 from app.extensions import db
