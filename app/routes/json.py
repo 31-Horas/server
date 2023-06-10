@@ -7,6 +7,8 @@ from botocore.exceptions import BotoCoreError, ClientError
 from dotenv import dotenv_values
 from flask_login import current_user
 
+from csv_to_json import make_json
+
 from app.extensions import db
 from app.models.user import User
 from app.models.bucket import Bucket
@@ -25,19 +27,18 @@ bucket_name = "truerodobucket"
 json_bp = Blueprint("json", __name__)
 
 
-@json_bp.route("/json_data/<item_id>", methods=["GET"])
-def json_data():
-    bucket_name = Bucket.bucketfile_name  # obtenemos el nombre del bucket con cookies
-    result = client.list_objects(
-        Bucket=bucket_name
-    )  # obtenemos el resultado de la lista de objetos del bucket
-    o = result.get("Contents")[0]  # obtenemos el primer objeto de la lista
-    # for o in result.get("Contents"):
-    data = client.get_object(
-        Bucket=bucket_name, Key=o.get("Key")
-    )  # obtenemos el objeto con el nombre del bucket y la key
-    contents = data[
-        "Body"
-    ].read()  # obtenemos el contenido del objeto (puede ser binary file)
-    print(contents.decode("utf-8"))
-    print(type(contents))
+@json_bp.route("/<item_id>", methods=["GET"])
+def json_data(item_id):
+    bucket = Bucket.query.filter_by(bucketfile_id=item_id).first()
+    bucket_code = bucket.bucketfile_code
+    print(bucket_name) # obtenemos el nombre del bucket con cookies
+    # Obtiene la lista de objetos en el bucket
+    response = client.get_object(Bucket=bucket_name, Key=bucket_code)
+    
+    # Lee el contenido del objeto
+    object_data = response['Body'].read()
+
+    # Decodifica el contenido si es necesario
+    decoded_data = object_data.decode('utf-8')    
+
+    return decoded_data, 200

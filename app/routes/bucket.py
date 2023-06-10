@@ -4,6 +4,7 @@ import os
 from botocore.exceptions import BotoCoreError, ClientError
 from dotenv import dotenv_values
 from flask_login import current_user, login_required
+from csv_to_json import make_json
 
 
 from app.extensions import db
@@ -19,17 +20,6 @@ client = boto3.client('s3', aws_access_key_id=config['AWS_ACCESS_KEY_ID'],
 bucket_name = 'truerodobucket'
 
 bucket_bp = Blueprint('bucket', __name__)
-
-@bucket_bp.route('/download_data/<item_id>', methods=['GET'])
-def download_data(item_id):
-    file_name = item_id
-    file_path = f"data/downloaded_{file_name}"
-
-    with open(file_path, 'wb') as f:
-        client.download_fileobj(bucket_name, f'{file_name}', f)
-    
-    return 'File downloaded successfully'
-
 
 @bucket_bp.route("/get_data", methods=['GET'])
 @login_required
@@ -75,7 +65,7 @@ def upload_to_s3():
     client.put_object(
         Body=file,
         Bucket=bucket_name,
-        Key=file_name
+        Key=file_code
     )
     
     return 'File uploaded successfully!', 200
