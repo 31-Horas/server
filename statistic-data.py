@@ -29,7 +29,7 @@ def get_json_statistic_data(filename, sheet_name):
 
 
 json_obj = get_json_statistic_data(
-    "statistic_id1358087_ownership-of-cybersecurity-certifications-worldwide-2022.xlsx",
+    "statistic_id1293871_salaries-in-the-it-industry-in-the-united-states-2021-by-type-of-job.xlsx",
     "Data",
 )
 
