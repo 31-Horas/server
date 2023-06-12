@@ -13,6 +13,3 @@ class Industry(db.Model, UserMixin):
     def __init__(self, industryFile_name, industryFile_path):
         self.industryFile_name = industryFile_name
         self.industryFile_path = industryFile_path
-
-    def get_id(self):
-        return str(self.industryFile_id)
