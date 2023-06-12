@@ -30,7 +30,7 @@ def execute_query(connection, query):
 
 def main():
     # stablishing connection
-    conn = create_server_connection("localhost", "root", "password")
+    conn = create_server_connection("otterboard.me", "root", "password")
 
     # get queries from file
     queries = list()

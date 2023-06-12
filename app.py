@@ -27,19 +27,19 @@ app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(json_bp, url_prefix='/json')
 
 # Configure CORS for '/api' routes
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
+CORS(app, resources={r"/api/*": {"origins": "http://otterboard.me:3000", "supports_credentials": True}})
 
 # Configure CORS for '/bucket' routes
-CORS(app, resources={r"/bucket/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
+CORS(app, resources={r"/bucket/*": {"origins": "http://otterboard.me:3000", "supports_credentials": True}})
 
 # Configure CORS for '/users' routes
-CORS(app, resources={r"/users/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
+CORS(app, resources={r"/users/*": {"origins": "http://otterboard.me:3000", "supports_credentials": True}})
 
 # Configure CORS for '/auth' routes
-CORS(app, resources={r"/auth/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
+CORS(app, resources={r"/auth/*": {"origins": "http://otterboard.me:3000", "supports_credentials": True}})
 
 # Configure CORS for '/auth' routes
-CORS(app, resources={r"/json/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
+CORS(app, resources={r"/json/*": {"origins": "http://otterboard.me:3000", "supports_credentials": True}})
 
 # Configure CORS for other routes
 CORS(app, resources={r"/*": {"origins": "*", "supports_credentials": True}})
