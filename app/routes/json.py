@@ -22,7 +22,7 @@ client = boto3.client(
     region_name=config["REGION_NAME"],
 )
 
-bucket_name = "truerodobucket"
+bucket_name = config['BUCKET_NAME']
 
 json_bp = Blueprint("json", __name__)
 
